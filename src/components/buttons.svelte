@@ -2,9 +2,6 @@
     import MediaQuery from "./mediaquery.svelte"
     </script>
     
-    
-    
-    
     <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
         <div class="container">

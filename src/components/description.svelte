@@ -1,17 +1,16 @@
 <script>
+import { ProductData} from "../store";
+let description;
+let descriptionArray;
 
-    let data = [
-		{ name: 'Maxiklänning från NLY Eve' },
-		{  name: 'Där har vi den. Drömklänningen' },
-		{  name: 'Material av chiffong'},{ id: '4', name: 'Plisserad överdel som är omlottlagd framtill' },
-        { name: 'Kort ärm' },
-        { name: 'V-ringning framtill' },
-        { name: 'Försluts med dragkedja och hyska och hake baktill' },
-        { name: 'Helfodrad' },
-        {name: 'Modellen är 180 cm lång och bär storlek EU 34' },
-	];
+ProductData.subscribe((value) => {
+        description = value;
+        description = JSON.stringify(description.Description)
+        description = description.replace(/['"]+/g, '');
+    });
+descriptionArray = description.trim().split("\u003cbr /\u003e");
 
-    
+
 </script>
 
 
@@ -19,12 +18,12 @@
     <div class="pdp-info">
     <h4>Beskrivning</h4>
     
-        {#each data as {name }, i}
+        {#each descriptionArray as info }
             <li>
-                {name}
+                {info}
             </li>
         {/each}
-    
+
 </div>
 
 

@@ -1,20 +1,24 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import _ from "lodash";
-  import productData from "./productData.json";
+  import { ProductData } from "../store";
 
-  
-	let mergedItems = [];
-	const mergeListArray = (a, b) => {		
-		let arrayMerged = b;
-    arrayMerged = [...a, ...b]
-		const sortedMergedArray = _.orderBy(arrayMerged, ['Name'], ['asc']);
-		return sortedMergedArray;
-	}
+  let data;
+  ProductData.subscribe((value) => {
+    data = value;
+  });
+
+  let mergedItems = [];
+  const mergeListArray = (a, b) => {
+    let arrayMerged = b;
+    arrayMerged = [...a, ...b];
+    const sortedMergedArray = _.orderBy(arrayMerged, ["Name"], ["asc"]);
+    return sortedMergedArray;
+  };
 
   const checkId = (checkId) => {
     let bool = false;
-    const soldOut = productData.SoldOutSizes;
+    const soldOut = data.SoldOutSizes;
     soldOut.forEach(({ Name, Id }) => {
       if (Id === checkId) bool = true;
     });
@@ -22,17 +26,18 @@
   };
 
   onMount(async () => {
-    mergedItems = mergeListArray(productData.Sizes, productData.SoldOutSizes);
+    mergedItems = mergeListArray(data.Sizes, data.SoldOutSizes);
   });
+  let chooseSize = "välj storlek";
 
-
-
-  let choose = "välj storlek";
+  function handleClick(value) {
+		chooseSize = value;
+	}
 </script>
 
 <div class="container">
   <label for="touch"><span>
-      {choose}
+      {chooseSize}
     </span></label>
   <input type="checkbox" id="touch" />
   <ul class="slide">
@@ -47,8 +52,9 @@
       {:else}
         <li
           on:click={() => {
-            choose = Name ;
-          }}>
+            handleClick(Name);
+          }}
+        >
           <a href="#1">{Name}</a>
         </li>
       {/if}
@@ -69,22 +75,21 @@
   }
 
   li a {
-    text-decoration:   none;
+    text-decoration: none;
     color: #2d2f31;
   }
 
-
   @media screen and (max-width: 800px) {
     label {
-    width: 100%;
-    padding: 0 0px 0 10px;
-  }
+      width: 100%;
+      padding: 0 0px 0 10px;
+    }
   }
 
   @media screen and (min-width: 800px) {
     label {
-    width: 100%;
-  }
+      width: 100%;
+    }
   }
 
   @media screen and (max-width: 800px) {
@@ -161,7 +166,7 @@
     cursor: pointer;
   }
 
-  .slide li:hover{
+  .slide li:hover {
     background-color: rgb(243, 241, 241);
   }
 
