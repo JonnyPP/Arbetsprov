@@ -1,21 +1,52 @@
 <script>
-    import { color, outfit } from "../store";
     import { onMount } from "svelte";
-
-
-    function SetColorAndSizes(setColor,setOutfit) {
-        color.set(setColor);
+    import {outfit} from "../store"
+    
+    function SetId(setOutfit) {
         outfit.set(setOutfit);
-
     }
+    export let colorData;
 
-    let colors = ["Ljusrosa", "Burgundy", "Ljusblå"];
-    let colorName;
-    let outfitName;
+    let colorsArray = colorData.ColorPickerItems;
     let regex = /_40/gm;
     let arrayImages = [];
+    let mergedColors = [];
+    let mergedIDs = []
+    let chooseColor;
+    
+    const getIDs = (ids) => {
+        let idsArr = [];
+        ids.forEach( color => {
+            idsArr.push(color.ShortSku.AsString);
+        })
+        return idsArr;
+    }
 
-    const outfitId = ["091323-0300", "091323-1126", "091323-7072"];
+    const getColorNames = (colors) => {
+        let colorsArr = [];
+        colors.forEach( color => {
+            colorsArr.push(color.ShortSku.ColorName);
+        })
+        return colorsArr;
+    }
+
+  const mergeListArray = (a, b) => {
+    let arrayMerged = b;
+    arrayMerged = [...a, ...b];
+    return arrayMerged;
+  };  
+
+
+
+  onMount(async () => {
+    let colors = getColorNames(colorsArray);
+    let ids = getIDs(colorsArray)
+    mergedColors = mergeListArray([colorData.ColorName], colors);
+    mergedIDs = mergeListArray([colorData.ShortSku], ids);
+    chooseColor = mergedColors[0];
+    getImages();
+
+  }); 
 
     async function fetchImage(outfitId) {
         const response = await fetch(
@@ -26,26 +57,21 @@
     }
 
     const getImages = () => {
-        outfitId.forEach((id) => {
+        mergedIDs.forEach((id) => {
             fetchImage(id);
         });
     };
+    
+    function handleClick(value) {
+		chooseColor = value;
+	}
 
-    onMount(async () => {
-        getImages();
-    }); 
-    color.subscribe((value) => {
-        colorName = value;
-    });
-    outfit.subscribe((value) => {
-        outfitName = value;
-    });
 </script>
 
 <div class="color-container">
     <div class="pdp-color">
         <h5>
-            Vald färg: <span>{colorName}</span>
+            Vald färg: <span>{chooseColor}</span>
         </h5>
     </div>
     <div class="img-container">
@@ -57,7 +83,8 @@
                             src="{src}?$categorypage_XL$"
                             alt="klänning"
                             on:click={() => {
-                                SetColorAndSizes(colors[i],name);
+                                handleClick(mergedColors[i]);
+                                SetId(mergedIDs[i])
                             }}
                         />
                     </div>

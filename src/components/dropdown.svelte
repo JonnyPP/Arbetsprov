@@ -1,13 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ProductData } from "../store";
-
-  let data;
-  ProductData.subscribe((value) => {
-    data = value;
-  });
-
+  export let data;
+  
   let mergedItems = [];
   const mergeListArray = (a, b) => {
     let arrayMerged = b;

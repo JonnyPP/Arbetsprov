@@ -3,17 +3,9 @@
     import MediaQuery from "svelte-media-query";
     import Prices from "./prices.svelte";
     import { Swiper, SwiperSlide } from "../../node_modules/swiper/svelte";
-    import { ProductData } from "../store";
-
-    let productData;
-    ProductData.subscribe((value) => {
-        productData = value;
-    });
     // Import Swiper styles
     import "swiper/css";
-
     import "swiper/css/navigation";
-
     import "swiper/css/pagination";
     // import required modules
     import {
@@ -23,15 +15,15 @@
         A11y,
         Autoplay,
     } from "../../node_modules/swiper";
-
+    export let data;
     let outfitName;
-
     let regex = /_40/gm;
 
     outfit.subscribe((value) => {
         outfitName = value;
     });
-    async function fetchImage(outfitName) {
+
+    async function fetchImage($outfit) {
         const response = await fetch(
             `https://media.nelly.com/s/nlyscandinavia/${outfitName}.json`
         );
@@ -42,12 +34,12 @@
 <MediaQuery query="(max-width: 800px)" let:matches>
     {#if matches}
         <p class="text">
-            <u>{productData.ClassName}</u> <u>&#xbb;</u>
-            <u>{productData.GroupName}</u> <u>&#xbb;</u>
-            <u>{productData.StyleName}</u>
+            <u>{data.ClassName}</u> <u>&#xbb;</u>
+            <u>{data.GroupName}</u> <u>&#xbb;</u>
+            <u>{data.StyleName}</u>
         </p>
 
-        {#await fetchImage(outfitName)}
+        {#await fetchImage($outfit)}
             <p>...waiting</p>
         {:then data}
             <div class="carousel">
@@ -122,7 +114,7 @@
             {:catch error}
                 <p>An error occurred!</p>
             {/await}
-            <Prices />
+            <Prices {data}/>
         </div>
     {/if}
 </MediaQuery>

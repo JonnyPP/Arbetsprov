@@ -1,12 +1,8 @@
 <script>
     import Styling from "./styling.svelte";
     import MediaQuery from "./mediaquery.svelte";
-    import { ProductData } from "../store";
+    export let data;
 
-    let data;
-    ProductData.subscribe((value) => {
-        data = value;
-    });
 </script>
 
 <MediaQuery query="(min-width: 800px)" let:matches>
@@ -28,7 +24,7 @@
                 <h2 class="sale-price">{data.Price}</h2>
             </div>
         </div>
-        <Styling />
+        <Styling stylingData = {data}/>
     {/if}
 </MediaQuery>
 
@@ -51,7 +47,7 @@
                 <h2 class="sale-price">{data.Price}</h2>
             </div>
         </div>
-        <Styling />
+        <Styling stylingData = {data}/>
     {/if}
 </MediaQuery>
 

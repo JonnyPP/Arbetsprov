@@ -4,15 +4,18 @@
 	import Colorpicker from "./colorpicker.svelte";
 	import MediaQuery from "svelte-media-query";
 	import Description from "./description.svelte";
+
+	export let stylingData;
+
 </script>
 
 <MediaQuery query="(min-width: 800px)" let:matches>
 	{#if matches}
 		<div class="container-desk">
-			<Form />
+			<Form data = {stylingData}/>
 			<Buttons />
-			<Colorpicker />
-			<Description />
+			<Colorpicker colorData={stylingData}/>
+			<Description description = {stylingData}/>
 		</div>
 	{/if}
 </MediaQuery>
@@ -20,7 +23,7 @@
 	{#if matches}
 		<div class="container-mobile">
 			<Buttons />
-			<Form />
+			<Form data = {stylingData}/>
 		</div>
 	{/if}
 </MediaQuery>

@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-
     export let query;
 
     let mql;

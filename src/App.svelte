@@ -4,15 +4,16 @@
 	import Carousels from "./components/carousel.svelte";
 	import Prices from "./components/prices.svelte";
 	import MediaQuery from "./components/mediaquery.svelte";
+	import productData from './components/productData.json'
 </script>
 
 <div class="main-container">
-	<Carousels />
+	<Carousels data = {productData}/>
 	<MediaQuery query="(max-width: 800px)" let:matches>
 		{#if matches}
-			<Prices />
-			<Colorpicker />
-			<Description />
+			<Prices data={productData}/>
+			<Colorpicker colorData = {productData} />
+			<Description description = {productData} />
 		{/if}
 	</MediaQuery>
 </div>
